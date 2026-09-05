@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+*.log
+data/
+*.db
+*.sqlite
+*.jsonl
+*.csv
+*.mp3
+.venv/

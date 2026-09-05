@@ -1,0 +1,138 @@
+/* arxiv-dashboard — dark theme (mirrors jarvis-lite look) */
+:root {
+  --bg: #10141a;
+  --panel: #171d26;
+  --panel-edge: #232c3a;
+  --text: #d8dee9;
+  --muted: #8a94a6;
+  --accent: #4fc3f7;
+  --good: #66bb6a;
+  --warn: #ffb74d;
+  --bad: #ef5350;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding: 12px;
+}
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 6px 14px;
+}
+h1 { font-size: 1.25rem; letter-spacing: .04em; color: var(--accent); }
+#status-bar { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: .85rem; }
+.units { color: var(--muted); font-size: .85rem; }
+.meta-row { display: flex; justify-content: space-between; color: var(--muted); font-size: .8rem; margin-top: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bad); display: inline-block; }
+.dot.ok { background: var(--good); }
+#clock-strip { display: flex; align-items: center; gap: 8px; }
+.status-sep { width: 1px; height: 16px; background: var(--panel-edge); }
+
+.grid { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+
+.widget {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  min-height: 200px;
+  position: relative;
+}
+.widget h2 {
+  font-size: .8rem; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--muted); margin-bottom: 10px; font-weight: 600;
+}
+.widget h2 .units { text-transform: none; letter-spacing: 0; }
+
+details { margin-bottom: 8px; }
+details summary { cursor: pointer; color: var(--accent); font-size: .9rem; }
+pre.scrollable { max-height: 260px; overflow: auto; font-size: .82rem; line-height: 1.5; }
+
+/* ---- arxiv papers table ---- */
+#widget-arxiv .widget-body { overflow: hidden; }
+.arxiv-filters {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
+  padding-bottom: 8px; border-bottom: 1px solid var(--panel-edge); margin-bottom: 8px;
+}
+.arxiv-filter { display: flex; flex-direction: column; gap: 2px; font-size: .78em; }
+.arxiv-filter span { opacity: .7; color: var(--muted); }
+.arxiv-filter input, .arxiv-filter select, .arxiv-filters button {
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--panel-edge); border-radius: 6px; padding: 5px 8px; font-size: .9rem;
+}
+.arxiv-filters button { cursor: pointer; }
+.arxiv-filters button:hover { background: rgba(128,128,128,.15); }
+.arxiv-table { width: 100%; border-collapse: collapse; font-size: .85em; }
+.arxiv-table th, .arxiv-table td {
+  border-bottom: 1px solid var(--panel-edge);
+  padding: 6px 8px; text-align: left; vertical-align: top;
+}
+.arxiv-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+.arxiv-table th.sortable:hover { background: rgba(128,128,128,.12); }
+.arxiv-table thead th { position: sticky; top: 0; background: var(--panel); color: var(--muted); }
+.arxiv-title { max-width: 340px; }
+.arxiv-title a { color: inherit; text-decoration: none; }
+.arxiv-title a:hover { text-decoration: underline; color: var(--accent); }
+.arxiv-summary { max-width: 480px; min-width: 240px; opacity: .85; }
+.arxiv-cats { font-size: .82em; opacity: .75; max-width: 180px; }
+.arxiv-score { font-weight: 700; text-align: center; white-space: nowrap; }
+.arxiv-score.hot { color: #ff6b5e; }
+.arxiv-score.warm { color: #ffb45e; }
+.arxiv-pager { display: flex; align-items: center; gap: 8px; padding: 8px 0 2px; }
+.arxiv-pager button {
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--panel-edge); border-radius: 6px; padding: 4px 10px; cursor: pointer;
+}
+.arxiv-pager button:hover:not(:disabled) { background: rgba(128,128,128,.15); }
+.arxiv-pager button:disabled { opacity: .4; cursor: default; }
+
+/* ---- arxiv tabs / multi-select / legend ---- */
+.arxiv-tabs { display: flex; gap: 6px; padding: 4px 0 10px; }
+.arxiv-tabs .tab {
+  background: transparent; color: var(--muted); border: 1px solid var(--panel-edge);
+  border-radius: 6px; padding: 4px 12px; cursor: pointer; font-size: .85rem;
+}
+.arxiv-tabs .tab:hover { color: var(--text); }
+.arxiv-tabs .tab.active { opacity: 1; background: rgba(128,128,128,.15); color: var(--text); font-weight: 600; }
+.arxiv-ms { position: relative; }
+.arxiv-ms-btn {
+  background: var(--bg); color: var(--text);
+  border: 1px solid var(--panel-edge); border-radius: 6px; padding: 5px 8px; font-size: .9rem; cursor: pointer;
+}
+.arxiv-ms-btn::after { content: " ▾"; opacity: .6; }
+.arxiv-ms-panel {
+  display: none; position: absolute; z-index: 20;
+  background: var(--panel); border: 1px solid var(--panel-edge); border-radius: 8px;
+  padding: 8px; max-height: 300px; overflow-y: auto; min-width: 260px; margin-top: 4px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+.arxiv-ms-panel.open { display: block; }
+.arxiv-ms-search {
+  width: 100%; background: var(--bg); color: var(--text);
+  border: 1px solid var(--panel-edge); border-radius: 6px; padding: 4px 6px; margin-bottom: 6px;
+}
+.arxiv-ms-actions { display: flex; gap: 6px; margin-bottom: 6px; }
+.arxiv-ms-actions button {
+  background: var(--bg); color: var(--text); border: 1px solid var(--panel-edge);
+  border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: .82rem;
+}
+.arxiv-ms-item { display: flex; align-items: center; gap: 6px; padding: 2px 4px; cursor: pointer; font-size: .85rem; }
+.arxiv-ms-item:hover { background: rgba(128,128,128,.15); }
+.arxiv-legend .arxiv-legend-sec { margin-bottom: 14px; }
+.arxiv-legend h3 { margin: 0 0 4px; font-size: 1em; color: var(--muted); }
+.arxiv-legend dl { display: grid; grid-template-columns: 260px 1fr; gap: 2px 12px; font-size: .85rem; }
+.arxiv-legend dt { color: var(--accent); }
+.arxiv-legend dt.present { font-weight: 700; }
+.arxiv-legend dd { opacity: .8; }
+.src { color: var(--muted); font-size: .78rem; }
+
+@media (max-width: 760px) {
+  body { padding: 8px; font-size: 14px; }
+  header { flex-direction: column; align-items: stretch; gap: 8px; }
+  .arxiv-legend dl { grid-template-columns: 1fr; }
+}
